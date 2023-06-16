@@ -1,3 +1,7 @@
+# project specific
+audios/*
+transcriptions/*
+
 # VSCode
 .vscode
 
