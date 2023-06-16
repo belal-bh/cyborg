@@ -14,7 +14,6 @@ auto-gptq
 
 
 # Utility library
-python-dotenv
 pathlib
 urllib3
 accelerate

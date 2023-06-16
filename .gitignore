@@ -1,7 +1,10 @@
 # project specific
 audios/*
+!audios/README.md
 transcriptions/*
+!transcriptions/README.md
 documents/*
+!documents/README.md
 DB
 
 # VSCode
