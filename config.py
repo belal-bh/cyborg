@@ -1,13 +1,16 @@
 import os
 from pathlib import Path
-from dotenv import dotenv_values
+# from dotenv import dotenv_values
 from chromadb.config import Settings
 from langchain.document_loaders import TextLoader, PDFMinerLoader, CSVLoader, UnstructuredExcelLoader
+from default_config import default_config
 
-_config = {
-    **dotenv_values(".env.default"),
-    **dotenv_values(".env")
-}
+# _config = {
+#     **dotenv_values(".env.default"),
+#     **dotenv_values(".env")
+# }
+
+_config = default_config
 
 # BASE Directory
 BASE_DIR = Path(__file__).resolve().parent
