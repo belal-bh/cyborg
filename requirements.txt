@@ -12,6 +12,9 @@ transformers
 protobuf
 auto-gptq
 
+llama-cpp-python
+pdfminer.six
+openpyxl
 
 # Utility library
 pathlib
