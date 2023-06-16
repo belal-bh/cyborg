@@ -1,3 +1,10 @@
+# For Knowledge Base stuff
 openai-whisper
+langchain
+chromadb
+InstructorEmbedding
+sentence-transformers
+
+# Utility library
 python-dotenv
 pathlib

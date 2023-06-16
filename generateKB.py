@@ -1,13 +1,28 @@
 import whisper
-from utils import get_audio_files, save_transcripsion
-from config import WHISPER_MODEL_NAME
+from langchain.embeddings import HuggingFaceInstructEmbeddings
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.vectorstores import Chroma
+from utils import (
+    get_audio_files,
+    save_transcripsion,
+    load_documents
+)
+from config import (
+    WHISPER_MODEL_NAME,
+    DEVICE_TYPE,
+    TRANSCRIBE_DIR,
+    DOCUMENTS_DIR,
+    EMBEDDING_MODEL_NAME,
+    KB_DIR,
+    CHROMA_SETTINGS
+)
 
 model = whisper.load_model(WHISPER_MODEL_NAME)
 
 
 def transcribe_audios(audio_files):
     # decode the audio
-    options = whisper.DecodingOptions(fp16=False)
+    options = whisper.DecodingOptions(fp16=(DEVICE_TYPE == "cuda"))
 
     for audio_file in audio_files:
         # load audio and pad/trim it to fit 30 seconds
@@ -35,6 +50,37 @@ def main():
     audio_files = get_audio_files()
     print("audio_files", audio_files)
     transcribe_audios(audio_files)
+
+    SOURCE_DIRECTORIES = [TRANSCRIBE_DIR, DOCUMENTS_DIR]
+
+    # Load documents and split in chunks
+    print(f"Loading documents from {SOURCE_DIRECTORIES} folders")
+    documents = load_documents(SOURCE_DIRECTORIES)
+    text_splitter = RecursiveCharacterTextSplitter(
+        chunk_size=1000, chunk_overlap=200)
+    texts = text_splitter.split_documents(documents)
+    print(
+        f"Loaded {len(documents)} documents from  {SOURCE_DIRECTORIES} folders")
+    print(f"Split into {len(texts)} chunks of text")
+
+    # Create embeddings
+    embeddings = HuggingFaceInstructEmbeddings(
+        model_name=EMBEDDING_MODEL_NAME,
+        model_kwargs={"device": DEVICE_TYPE},
+    )
+    # change the embedding type here if you are running into issues.
+    # These are much smaller embeddings and will work for most appications
+    # If you use HuggingFaceEmbeddings, make sure to also use the same in the
+    # other files
+
+    db = Chroma.from_documents(
+        texts,
+        embeddings,
+        persist_directory=str(KB_DIR.absolute()),
+        client_settings=CHROMA_SETTINGS,
+    )
+    db.persist()
+    db = None
 
 
 if __name__ == "__main__":
