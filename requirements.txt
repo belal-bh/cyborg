@@ -5,6 +5,18 @@ chromadb
 InstructorEmbedding
 sentence-transformers
 
+# GPT
+faiss-cpu
+huggingface_hub
+transformers
+protobuf
+auto-gptq
+
+
 # Utility library
 python-dotenv
 pathlib
+urllib3
+accelerate
+bitsandbytes
+click

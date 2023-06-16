@@ -54,3 +54,7 @@ CHROMA_SETTINGS = Settings(
     persist_directory=str(KB_DIR),
     anonymized_telemetry=False
 )
+
+# default model_id and Basename (See details at load_model.py)
+LLM_MODEL_ID = "TheBloke/WizardLM-7B-uncensored-GPTQ"
+LLM_MODEL_BASENAME = "WizardLM-7B-uncensored-GPTQ-4bit-128g.compat.no-act-order.safetensors"
